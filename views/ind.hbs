@@ -1,0 +1,247 @@
+<br>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">№</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Выберите тел</th>
+        <th scope="col">Телефон(ы)</th>
+        <th scope="col">Страна</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+<tbody>
+
+{{#if obj.length}}
+    {{#each obj}}
+        <tr>
+            <th scope="row">{{num}}</th>
+            <td>{{con_name}}</td>
+            <td>{{con_fam}}</td>
+            <td>
+                <div class="form-group">
+                    <select class="form-control" id="{{id}}" onchange="ch{{num}}1()">
+                        <option>Мобильный</option>
+                        <option>Домашний</option>
+                    </select>
+                </div>
+            </td>
+            <script>
+                var p = 0
+
+                function ch{{num}}1() {
+                    if (p % 2 === 0) {
+                        document.getElementById('1{{num}}1').hidden = true;
+                        document.getElementById('2{{num}}2').hidden = false;
+                        p = 1
+                    } else {
+                        document.getElementById('1{{num}}1').hidden = false;
+                        document.getElementById('2{{num}}2').hidden = true;
+                        p = 0
+                    }
+                }
+            </script>
+
+
+            <td>
+                <ul class="list-group" id="1{{num}}1">
+                    {{#each con_phon.mob}}
+                        <li class="list-group-item">{{this}}</li>
+                    {{/each}}
+                </ul>
+                <ul class="list-group" id="2{{num}}2" hidden>
+                    {{#each con_phon.dom}}
+                        <li class="list-group-item">{{this}}</li>
+                    {{/each}}
+                </ul>
+            </td>
+            <td>{{con_country}}</td>
+            <td>
+                <div class="row">
+                    <a href="#myModal{{id}}" class="btn btn-outline-primary" data-toggle="modal">
+                        <svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                        </svg>
+                    </a>
+                    <div id="myModal{{id}}" class="modal fade">
+                        <div class="modal-dialog modal-lg">
+                            <form action="/change" method="POST">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modal">Изменить контакт</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="formGroupExampleInput">Имя
+                                                        <a class="text-light bg-dark"> {{con_name}}</a>
+                                                        изменить на </label>
+                                                    <input type="text" name="oldname" hidden value="{{con_name}}" >
+                                                    <input type="text" class="form-control" name="con_name"
+                                                           placeholder="Введите имя">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="formGroupExampleInput2">Фамилию
+                                                        <a class="text-light bg-dark"> {{con_fam}}</a>
+                                                        изменить на </label>
+                                                    <input type="text" name="oldfam" hidden value="{{con_fam}}" >
+                                                    <input type="text" class="form-control" name="con_fam"
+                                                           placeholder="Введите фамилию">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="formGroupExampleInput2">Страну
+                                                        <a class="text-light bg-dark"> {{con_country}}</a>
+                                                        изменить на</label>
+                                                    <input type="text" name="oldcountry" hidden value="{{con_country}}" >
+                                                    <input type="text" class="form-control" name="con_country"
+                                                           placeholder="Введите страну">
+                                                </div>
+                                            </div>
+
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <label for="formGroupExampleInput2">Телефоны</label>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-secondary dropdown-toggle"
+                                                                        type="button"
+                                                                        id="dropd{{@index}}" data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    Мобильные
+                                                                </button>
+                                                                <div class="dropdown-menu"
+                                                                     aria-labelledby="dropd{{@index}}">
+                                                                    {{#each con_phon.mob}}
+                                                                        <div class="btn-group" role="group"
+                                                                             aria-label="Basic example">
+                                                                            <input type="text" name="tel_mob"
+                                                                                   value="{{this}}"
+                                                                                   onclick="this.parentNode.remove()"
+                                                                                   class="btn btn-secondary">
+                                                                        </div>
+                                                                    {{/each}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropdown">
+
+                                                                <button class="btn btn-secondary dropdown-toggle"
+                                                                        type="button"
+                                                                        id="dropdown{{@index}}" data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    Домашние
+                                                                </button>
+                                                                <div class="dropdown-menu"
+                                                                     aria-labelledby="dropdown{{@index}}">
+                                                                    {{#each con_phon.dom}}
+                                                                        <div class="btn-group"
+                                                                             role="group"
+                                                                             aria-label="Basic example">
+                                                                            <input type="text" name="tel_dom"
+                                                                                   onclick="this.parentNode.remove()"
+                                                                                   value="{{this}}"
+                                                                                   class="btn btn-secondary">
+                                                                        </div>
+                                                                    {{/each}}
+                                                                </div>
+
+                                                            </div>
+                                                            <button type="button" onclick="fnew1{{num}}{{@index}}()"
+                                                                    class="btn btn-outline-success">+
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="newphon{{num}}{{@index}}"></div>
+
+                                                    <script>
+                                                        var op = 10
+
+                                                        function deli1{{num}}{{@index}}() {
+
+                                                            let newDiv = document.getElementById(op);
+                                                            newDiv.parentNode.removeChild(newDiv);
+                                                            op--;
+                                                        }
+
+
+                                                        function fnew1{{num}}{{@index}}() {
+                                                            op++;
+                                                            let em = document.getElementById("newphon{{num}}{{@index}}");
+                                                            let elem = document.createElement('div');
+                                                            elem.innerHTML = "<div class=\"form-group\">\n" +
+                                                                    "                                                <div class=\"btn-group\" role=\"group\"\n" +
+                                                                    "                                                     aria-label=\"Button group with nested dropdown\">\n" +
+                                                                    "                                                    <div class=\"btn-group\" role=\"group\">\n" +
+                                                                    "                                                        <select class=\"btn btn-secondary dropdown-toggle\" name=\"var_tel\">\n" +
+                                                                    "                                                            <option>Домашний</option>\n" +
+                                                                    "                                                            <option>Мобильный</option>\n" +
+                                                                    "                                                        </select>\n" +
+                                                                    "                                                    </div>\n" +
+                                                                    "                                                    <input type=\"text\" class=\"form-control\" name=\"newtelch\"\n" +
+                                                                    "                                                           placeholder=\"Введите номер телефона\">\n" +
+                                                                    "                                                    <button type=\"button\" id=\"opa\" name=\"top\"  class=\"btn btn-danger\" onclick=\"deli1{{num}}{{@index}}()\">-</button>\n" +
+                                                                    "                                                </div>\n" +
+                                                                    "                                            </div>"
+                                                            elem.name = "newtelch";
+                                                            elem.id = op;
+
+                                                            em.append(elem)
+                                                        }
+                                                    </script>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="RESET" class="btn btn-outline-danger" data-dismiss="modal">
+                                            Отмена
+                                        </button>
+                                        <button type="submit" name="id" value="{{id}}" class="btn btn-outline-dark">
+                                            Сохранить изменения
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <form action="/del" method="POST">
+                            <button type="submit" name="id" value="{{id}}" class="btn btn-outline-danger">
+                                <svg class="bi bi-x" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </td>
+        </tr>
+
+
+    {{/each}}
+    </tbody>
+    </table>
+
+
+{{else}}
+    <p>В справочнике нет контактов</p>
+{{/if}}
